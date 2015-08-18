@@ -57,7 +57,7 @@ public class Global implements ApplicationListener<ApplicationEvent> {
         databaseLogger = LoggerList.get(1);
         errorLogger = LoggerList.get(2);
         businessLogger = LoggerList.get(3);                  
-           
+            
         //初始化mysql  
         mysqlClass1 = DoMysql1.initMysqlByDefaultXml(System.getProperty("webAppMvcRootDir")+"/WEB-INF/MyConfig/mysql.xml");
         if(mysqlClass1.getExceptionString()!=null){ 
