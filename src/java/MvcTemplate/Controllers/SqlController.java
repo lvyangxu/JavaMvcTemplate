@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SpringMvcTemplate.Controllers;
+package MvcTemplate.Controllers;
 
-import SpringMvcTemplate.Global.Global;
-import SpringMvcTemplate.Models.StorageModel;
+import MvcTemplate.Global.Global;
+import MvcTemplate.Models.SqlModel;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/click")
-public class StatisticsController {
+public class SqlController {
     
-    StorageModel StorageModel1 = new StorageModel();
+    SqlModel StorageModel1 = new SqlModel();
     
     @ResponseBody
     @RequestMapping("/pageBrowse/{agentId:[0-9a-zA-Z]{1,10}}")

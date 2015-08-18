@@ -7,6 +7,8 @@ and open the template in the editor.
 
 
 <root>
-    <username>sankuoSem</username>
-    <password>sankuoSem</password>
+    <!--登录用户名-->
+    <username>MvcUsername</username>
+    <!--登录密码-->
+    <password>MvcPassword</password>
 </root>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SpringMvcTemplate.Global;
+package MvcTemplate.Global;
 
 import MyJavaLibrary.DoLog4j;
 import MyJavaLibrary.DoMysql;
@@ -48,7 +48,7 @@ public class Global implements ApplicationListener<ApplicationEvent> {
     DoMysql DoMysql1 = new DoMysql();
     DoLog4j DoLog4j1 = new DoLog4j();
     public static Logger systemLogger = null, databaseLogger = null, errorLogger = null, businessLogger = null;
-    public static DoMysql.mysqlConnectionClass mysqlConnectionClass1;
+    public static DoMysql.mysqlClass mysqlClass1;
 
     private void applicationStartOrRefresh(){
         //初始化log4j
@@ -59,11 +59,10 @@ public class Global implements ApplicationListener<ApplicationEvent> {
         businessLogger = LoggerList.get(3);                  
            
         //初始化mysql  
-        Object[] initMysqlResult = DoMysql1.initMysqlByDefaultXml(System.getProperty("webAppMvcRootDir")+"/WEB-INF/MyConfig/mysql.xml");
-        if(initMysqlResult[1]!=null){ 
-            errorLogger.info("mysql初始化失败:" + initMysqlResult[1]);
+        mysqlClass1 = DoMysql1.initMysqlByDefaultXml(System.getProperty("webAppMvcRootDir")+"/WEB-INF/MyConfig/mysql.xml");
+        if(mysqlClass1.getExceptionString()!=null){ 
+            errorLogger.info("mysql初始化失败:" + mysqlClass1.getExceptionString());
         }        
-        mysqlConnectionClass1= (DoMysql.mysqlConnectionClass)initMysqlResult[0];
     }
     
 

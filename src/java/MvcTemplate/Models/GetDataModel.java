@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SpringMvcTemplate.Models;
+package MvcTemplate.Models;
 
 import MyJavaLibrary.DoMysql;
-import SpringMvcTemplate.Global.Global;
+import MvcTemplate.Global.Global;
 import java.util.List;
 
 /**

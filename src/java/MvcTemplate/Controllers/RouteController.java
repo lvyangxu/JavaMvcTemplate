@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SpringMvcTemplate.Controllers;
+package MvcTemplate.Controllers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,20 +20,11 @@ import org.springframework.web.servlet.view.RedirectView;
  * @author anshifafeng
  */
 @Controller
-public class DefaultController {
+public class RouteController {
 
-    @RequestMapping(value = {"{viewName}"})
-    public String defaultWebSite(@PathVariable String viewName) {
-        return "/"+viewName;
+    @RequestMapping(value = {"{controller}/{action}"})
+    public String defaultWebSite(@PathVariable String controller,@PathVariable String action) {
+        return "/"+controller+"/"+action;
     }
-    
 
-    
-    @RequestMapping(value = {"/index{landPageNum:[0-9]+}"})
-    public ModelAndView indexWebSite(@PathVariable String landPageNum) {
-        Map model = new HashMap();
-        model.put("landPageNum", landPageNum);
-        ModelAndView ModelAndView1 = new ModelAndView("index",model);
-        return ModelAndView1;
-    }
 }

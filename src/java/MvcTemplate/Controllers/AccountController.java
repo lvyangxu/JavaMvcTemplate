@@ -1,11 +1,11 @@
-package SpringMvcTemplate.Controllers;
+package MvcTemplate.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import SpringMvcTemplate.Models.AccountModel;
+import MvcTemplate.Models.AccountModel;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
@@ -24,13 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @SessionAttributes("session")
-@RequestMapping(value = "/account")
+@RequestMapping(value = "/Account")
 public class AccountController {
     
     AccountModel AccountModel1 = new AccountModel();
     
     @ResponseBody
-    @RequestMapping(value="/login/{username}/{password}")
+    @RequestMapping(value="/DoLogin/{username}/{password}")
     public String doLogin(@PathVariable String username,@PathVariable String password,HttpSession session){
         String result = null;
         String loginResult = AccountModel1.doLogin(username, password);
@@ -45,7 +45,7 @@ public class AccountController {
 
     }
     
-    @RequestMapping(value="/logout")
+    @RequestMapping(value="/DoLogout")
     public String doLogout(HttpSession session){          
         session.setAttribute("username", null);
         return "login"; 
