@@ -7,6 +7,8 @@ package MvcTemplate.Models;
 
 import MyJavaLibrary.DoMysql;
 import MvcTemplate.Global.Global;
+import MyJavaLibrary.DoDataTranslation;
+import java.sql.ResultSet;
 
 /**
  *
@@ -15,14 +17,15 @@ import MvcTemplate.Global.Global;
 public class SqlModel {
     
     DoMysql DoMysql1 = new DoMysql();
+    DoDataTranslation DoDataTranslation1 = new DoDataTranslation();
     
     /**
      * sql更新模型
      * @param sqlCommand
      * @return 
      */
-    public String doUpdate(String sqlCommand){
-        String alterResult = DoMysql1.doMysqlAlter(Global.mysqlConnectionClass1, sqlCommand);
+    public boolean doUpdate(String sqlCommand){
+        boolean alterResult = DoMysql1.doMysqlAlter(Global.mysqlClass1, sqlCommand);
         return alterResult;    
     }
 
@@ -31,9 +34,10 @@ public class SqlModel {
      * @param sqlCommand
      * @return
      */
-    public Object[] doSelect(String sqlCommand) {
-        Object[] alterResult = DoMysql1.doMysqlSelect(Global.mysqlConnectionClass1, sqlCommand);
-        return alterResult;
+    public String doSelect(String sqlCommand) {
+        ResultSet ResultSet1 = DoMysql1.doMysqlSelect(Global.mysqlClass1, sqlCommand);
+        String json = DoDataTranslation1.resultSetToJson(ResultSet1);
+        return json;
     }
     
 }

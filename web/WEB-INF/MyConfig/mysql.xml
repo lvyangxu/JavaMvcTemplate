@@ -5,7 +5,7 @@
     <!--mysql主机端口-->
     <port>3306</port>
     <!--mysql连接的数据库名称-->
-    <database>sem</database>
+    <database>mvctemplate</database>
     <!--mysql用户名-->
     <user>sankuo</user>
     <!--mysql密码-->

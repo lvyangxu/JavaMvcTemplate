@@ -9,11 +9,11 @@ var myModule = angular.module("myAngular", []);
 /**
  * 自定义指令-登录框 ="asp.net"></mylogin>
  * mylogin 自定义指令的标签
- * login-url 登录验证地址,可选,有值时请求该地址,未定义时根据mvc-client取默认地址
+ * login-url 登录验证地址,可选,有值时请求该地址,未定义时取默认地址
  * transfer-url 登录成功后跳转的地址
  * username-cookie-name cookie-用户名的名称
  * password-cookie-name cookie-密码的名称
- * mvc-client 目标平台,可选值为asp.net和java（默认值为java）,用于确定登录验证的默认地址
+ * mvc-client 目标平台,可选值为asp.net和java（默认值为java）,用于确定post传参时的格式及content-type，java必须为a=b&c=d格式且content-type必须为application/x-www-form-urlencoded，asp.net可以使用angular默认的方式
  */
 myModule.directive('mylogin', function () {
     var directiveDefinitionObject = {
@@ -36,12 +36,20 @@ myModule.directive('mylogin', function () {
             $scope.loginButton = { "margin-top": "50px","margin-bottom":"20px" };
             $scope.loginInput = { height: "50px", border: "solid", "border-color": "aqua", "margin-top": "20px" };
             $scope.doLogin = function () {
-                var url = ($scope.mvcClient == "asp.net") ? "DoLogin" : "doLogin";
+                var url = "DoLogin";
                 if ($scope.loginUrl != undefined) {
                     url = $scope.loginUrl;
                 }
+                
                 var requestData = {username:$scope.username,password:$scope.password};
-                $http({ method: "post", url: url, data: requestData })
+                var headers = { 'Content-Type': 'application/json'};
+                //java web的特殊设置,用于接收post参数
+                if($scope.mvcClient!="asp.net"){
+                    requestData = "username="+$scope.username+"&password="+$scope.password;
+                    headers = { 'Content-Type': 'application/x-www-form-urlencoded'};
+                }
+                               
+                $http({ method: "post", url: url, data: requestData, headers: headers})
                     .success(function (jsonResult) {
                         if (jsonResult.success == "true") {
                             window.location.href = $scope.transferUrl;

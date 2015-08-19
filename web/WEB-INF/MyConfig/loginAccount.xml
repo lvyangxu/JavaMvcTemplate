@@ -8,7 +8,11 @@ and open the template in the editor.
 
 <root>
     <!--登录用户名-->
-    <username>MvcUsername</username>
+    <username>test</username>
     <!--登录密码-->
-    <password>MvcPassword</password>
+    <password>test</password>
+    <!--登录用户名存储的cookie名称-->
+    <usernameCookieName>MvcUsername</usernameCookieName>
+    <!--登录密码存储的cookie名称-->
+    <passwordCookieName>MvcPassword</passwordCookieName>
 </root>
