@@ -27,10 +27,10 @@ function jsRefernce(jsPathArr) {
     return result;
 }
 
-var myCssPathArr = ["css/bootstrap.min.css", "css/bootstrap.min.css", "css/module.css"];
+var myCssPathArr = ["css/bootstrap.min.css", "css/bootstrap.min.css", "css/module.css","css/owl.carousel.css","css/owl.theme.css"];
 var cssString = cssRefernce(myCssPathArr);
 
-var myJsPathArr = ["js/jquery-2.1.4.min.js", "js/bootstrap.min.js", "js/angular-1.4.3.js", "js/data-model.js", "js/image-model.js", "js/module.js"];
+var myJsPathArr = ["js/jquery-2.1.4.min.js", "js/bootstrap.min.js", "js/angular-1.4.3.js", "js/data-model.js", "js/image-model.js", "js/communication-model.js", "js/module.js","js/owl.carousel.js"];
 var jsString = jsRefernce(myJsPathArr);
 
 //输出所有引用的内容
