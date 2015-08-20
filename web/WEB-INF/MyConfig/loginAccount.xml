@@ -12,7 +12,7 @@ and open the template in the editor.
     <!--登录密码-->
     <password>test</password>
     <!--登录用户名存储的cookie名称-->
-    <usernameCookieName>MvcUsername</usernameCookieName>
+    <usernameCookieName>mvcTemplateUsername</usernameCookieName>
     <!--登录密码存储的cookie名称-->
-    <passwordCookieName>MvcPassword</passwordCookieName>
+    <passwordCookieName>mvcTemplatePassword</passwordCookieName>
 </root>

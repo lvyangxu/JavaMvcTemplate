@@ -30,17 +30,28 @@ myModule.directive('mylogin', function () {
             scope.usernameCookieName = iAttrs.usernameCookieName;
             scope.passwordCookieName = iAttrs.passwordCookieName;
             scope.mvcClient = iAttrs.mvcClient;
+
+            //读取cookie，自动填充表单
+            if (getCookie(scope.usernameCookieName) != undefined) {
+                scope.username = getCookie(scope.usernameCookieName);
+            }
+            if (getCookie(scope.passwordCookieName) != undefined) {
+                scope.password = getCookie(scope.passwordCookieName);
+            }
         },
         controller: ("loginController", ["$scope", "$http", function ($scope, $http) {
             $scope.loginFrame = { "position": "fixed", "top": "30%", "padding-top": "50px", "padding-bottom": "50px", "animation": "mylogin 2s" };
             $scope.loginButton = { "margin-top": "50px","margin-bottom":"20px" };
             $scope.loginInput = { height: "50px", border: "solid", "border-color": "aqua", "margin-top": "20px" };
+           
+     
+            
             $scope.doLogin = function () {
                 var url = "DoLogin";
                 if ($scope.loginUrl != undefined) {
                     url = $scope.loginUrl;
                 }
-                
+
                 var requestData = {username:$scope.username,password:$scope.password};
                 var headers = { 'Content-Type': 'application/json'};
                 //java web的特殊设置,用于接收post参数
@@ -52,6 +63,8 @@ myModule.directive('mylogin', function () {
                 $http({ method: "post", url: url, data: requestData, headers: headers})
                     .success(function (jsonResult) {
                         if (jsonResult.success == "true") {
+                            setCookie($scope.usernameCookieName,$scope.username,30);
+                            setCookie($scope.passwordCookieName,$scope.password,30);
                             window.location.href = $scope.transferUrl;
                         } else {
                             alert("帐号密码错误");

@@ -317,11 +317,11 @@ function MD5Encode32(content) {
 })(jQuery);
 
 ///根据cookie名称获取cookie的值,参数为cookie名称
-function getCookie(c_name) {
+function getCookie(cookieName) {
     if (document.cookie.length > 0) {
-        c_start = document.cookie.indexOf(c_name + "=");
+        c_start = document.cookie.indexOf(cookieName + "=");
         if (c_start != -1) {
-            c_start = c_start + c_name.length + 1;
+            c_start = c_start + cookieName.length + 1;
             c_end = document.cookie.indexOf(";", c_start);
             if (c_end == -1) {
                 c_end = document.cookie.length;
@@ -335,10 +335,10 @@ function getCookie(c_name) {
 }
 
 ///设置cookie的值及有效期,参数分别为cookie名称,cookie的值,cookie有效期(天)
-function setCookie(c_name, value, expiredays) {
+function setCookie(cookieName, cookieValue, expiredays) {
     var exdate = new Date();
-    value = base64Encode(value);
+    cookieValue = base64Encode(cookieValue);
     exdate.setDate(exdate.getDate() + expiredays);
-    document.cookie = c_name + "=" + escape(value) +
-    ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+    var exdateStr = (expiredays == null) ? "" : ";expires=" + exdate.toGMTString();    
+    document.cookie = cookieName + "=" + escape(cookieValue) + exdateStr+";path=/";
 }

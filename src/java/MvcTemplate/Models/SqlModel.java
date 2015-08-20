@@ -35,9 +35,8 @@ public class SqlModel {
      * @return
      */
     public String doSelect(String sqlCommand) {
-        ResultSet ResultSet1 = DoMysql1.doMysqlSelect(Global.mysqlClass1, sqlCommand);
-        String json = DoDataTranslation1.resultSetToJson(ResultSet1);
-        return json;
+        String result = DoMysql1.doMysqlSelectToJson(Global.mysqlClass1, sqlCommand);
+        return result;
     }
     
 }

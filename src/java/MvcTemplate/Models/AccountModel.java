@@ -12,6 +12,7 @@ import MyJavaLibrary.DoXml;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.tomcat.util.buf.UDecoder;
 
 /**
  *
@@ -46,8 +47,10 @@ public class AccountModel {
     public String checkLogin(HttpSession session, HttpServletRequest request) {
         if (session.getAttribute("username") == null) {
             String account = DoServletContext1.getCookie(request, Global.usernameCookieNameConfig);
+            account = UDecoder.URLDecode(account);
             account = DoDataTranslation1.base64Decode(account);
             String password = DoServletContext1.getCookie(request, Global.passwordCookieNameConfig);
+            password = UDecoder.URLDecode(password);
             password = DoDataTranslation1.base64Decode(password);
             String loginResult = doLogin(account, password);
             if (loginResult != null) {
