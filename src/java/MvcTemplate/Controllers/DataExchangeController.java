@@ -8,7 +8,9 @@ package MvcTemplate.Controllers;
 import MvcTemplate.Models.AccountModel;
 import MvcTemplate.Models.BusinessLogicModel;
 import MvcTemplate.Models.SqlModel;
+import MyJavaLibrary.DoFileUpload;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.jdbc.object.SqlCall;
 import org.springframework.stereotype.Controller;
@@ -29,9 +31,10 @@ public class DataExchangeController {
     AccountModel AccountModel1 = new AccountModel();
     SqlModel SqlModel1 = new SqlModel();
     BusinessLogicModel BusinessLogicModel1 = new BusinessLogicModel();
+    DoFileUpload DoFileUpload1 = new DoFileUpload();
     
     @ResponseBody
-    @RequestMapping(value = "/getData/{startTime}/{endTime}/{key}")
+    @RequestMapping(value = "/GetData/{startTime}/{endTime}/{key}")
     public String getData(@PathVariable String startTime,@PathVariable String endTime,@PathVariable String key, HttpSession session, HttpServletRequest request) {
         String checkResult = AccountModel1.checkLogin(session, request);
         if (checkResult != null) {
@@ -43,6 +46,23 @@ public class DataExchangeController {
         
         String result = SqlModel1.doSelect(sqlCommand);
         return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/Upload")    
+    public String upload(HttpServletRequest request, HttpServletResponse response,HttpSession session){
+        String checkResult = AccountModel1.checkLogin(session, request);
+        if (checkResult != null) {
+            return checkResult;
+        }
+        
+        
+        String fileUploadResult = DoFileUpload1.springMvcFileUpload(request, response, "Upload/");
+        if(fileUploadResult==null){
+            return "{\"success\":\"true\"}";
+        }else{
+            return "{\"success\":\"false\"}";
+        }
     }
     
 }

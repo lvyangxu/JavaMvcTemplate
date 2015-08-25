@@ -19,4 +19,3 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
         failureCallback(textStatus);
     });
 };
-

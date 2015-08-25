@@ -39,7 +39,7 @@ myModule.directive('mylogin', function () {
                 scope.password = getCookie(scope.passwordCookieName);
             }
         },
-        controller: ("loginController", ["$scope", "$http", function ($scope, $http) {
+        controller: ("LoginController", ["$scope", "$http", function ($scope, $http) {
             $scope.loginFrame = { "position": "fixed", "top": "30%", "padding-top": "50px", "padding-bottom": "50px", "animation": "mylogin 2s" };
             $scope.loginButton = { "margin-top": "50px","margin-bottom":"20px" };
             $scope.loginInput = { height: "50px", border: "solid", "border-color": "aqua", "margin-top": "20px" };

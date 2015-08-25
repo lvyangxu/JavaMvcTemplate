@@ -4,11 +4,14 @@
  * 2015-08-11
  */
 
+
+/*登录框样式*/
 @keyframes mylogin {
     0% {opacity:0;top:25%}
     100% {opacity:1;top:30%}
 }
-
 .loginBody {
     background-color:dodgerblue;
 }
+
+/*上传控件样式*/
