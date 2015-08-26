@@ -7,7 +7,7 @@
 var myModule = angular.module("myAngular", []);
 
 /**
- * 自定义指令-登录框 ="asp.net"></mylogin>
+ * 自定义指令-登录框
  * mylogin 自定义指令的标签
  * login-url 登录验证地址,可选,有值时请求该地址,未定义时取默认地址
  * transfer-url 登录成功后跳转的地址
@@ -77,15 +77,105 @@ myModule.directive('mylogin', function () {
     return directiveDefinitionObject;
 });
 
-myModule.animation('.animation-name', function ($inject1, $inject2) {
-       return {
-         eventName : function(element, done) {
-               //code to run the animation
-               //once complete, then run done()
-               return function cancellationFunction(element) {
-                     //code to cancel the animation
-                   }
-             }
-       }
- })
+/**
+ * 自定义指令-文件上传简易面板
+ * myupload 自定义指令的标签
+ * upload-url 上传请求的服务器地址,可选,有值时请求该地址,未定义时取默认地址"../DataExchange/Upload"
+ */
+myModule.directive('myupload', function () {
+    var directiveDefinitionObject = {
+        template:
+                    "<span style=\"position: relative;height: 250px;width: 600px;display: inline-block;border:solid;border-color: yellowgreen\">" +
+                        "<button class=\"btn btn-info\" ng-click=\"callSelectButton()\" ng-style=\"uploadDivStyle\">选择上传的文件</button>" +
+                        "<div id=\"fileNum\" ng-style=\"uploadDivStyle\">选择的文件数量:</div>" +
+                        "<div id=\"fileName\" ng-style=\"uploadDivStyle\">文件名:</div>" +
+                        "<div id=\"fileSize\" ng-style=\"uploadDivStyle\">文件大小:</div>" +
+                        "<div ng-style=\"uploadDivStyle\">上传进度:{{fileProgress}}</div>" +
+                        "<button class=\"btn btn-warning\" ng-click=\"uploadFile()\" ng-style=\"uploadDivStyle\">开始上传</button>" +
+                        "<input id=\"selectUploadFile\" style=\"display: none\"  type=\"file\"  multiple=\"multiple\" onchange=\"fileSelected()\">" +
+                    "</span>",
+        restrict: 'E',
+        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+            scope.uploadUrl = iAttrs.uploadUrl;
+        },
+        controller: ("UploadController", ["$scope", function ($scope) {
+                $scope.callSelectButton = function () {
+                    document.getElementById("selectUploadFile").click();
+                };
+                $scope.uploadDivStyle = {"margin-left": "25%", "width": "50%", "margin-top": "10px"};
 
+                $scope.uploadFile = function () {
+                    var fd = new FormData();
+                    var fileNum = document.getElementById('selectUploadFile').files.length;
+                    if (fileNum == 0) {
+                        alert("请先选择至少一个文件");
+                        return;
+                    }
+                    for (var i = 0; i < fileNum; i++) {
+                        fd.append(i, document.getElementById('selectUploadFile').files[i]);
+                    }
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", $scope.uploadProgress, false);
+                    xhr.addEventListener("load", $scope.uploadComplete, false);
+                    xhr.addEventListener("error", $scope.uploadFailed, false);
+                    xhr.addEventListener("abort", $scope.uploadCanceled, false);
+                    if ($scope.uploadUrl == undefined) {
+                        $scope.uploadUrl = "../DataExchange/Upload";
+                    }
+                    xhr.open("POST", $scope.uploadUrl);
+                    xhr.send(fd);
+                };
+
+                $scope.uploadProgress = function (evt) {
+                    $scope.$apply(function () {
+                        if (evt.lengthComputable) {
+                            var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+                            $scope.fileProgress = percentComplete + "%";
+                        }
+                    });
+                };
+
+                $scope.uploadComplete = function (evt) {
+                    var jsonObject = stringToJsonObject(evt.target.responseText);
+                    if (jsonObject.success == "true") {
+                        alert("上传成功");
+                    } else {
+                        alert("上传失败，服务器出现异常");
+                    }
+                }
+
+                $scope.uploadFailed = function (evt) {
+                    alert("上传失败");
+                }
+
+                $scope.uploadCanceled = function (evt) {
+                    alert("上传操作已被用户或浏览器取消");
+                }
+            }])
+    };
+    return directiveDefinitionObject;
+});
+
+//选取文件后的逻辑，angular中未找到对应onchange的事件，只能用js来实现
+function fileSelected() {
+    var fileNum = document.getElementById('selectUploadFile').files.length;
+    var fileName = "";
+    var fileSize = 0;
+    for (var i = 0; i < document.getElementById('selectUploadFile').files.length; i++) {
+        var file = document.getElementById('selectUploadFile').files[i];
+        if (fileSize == 1) {
+            fileName = file.name;
+        } else {
+            fileName = file.name + ";等";
+        }
+        fileSize = fileSize + file.size;
+    }
+    $("#fileNum").html("选择的文件数量:" + fileNum);
+    $("#fileName").html("文件名:" + fileName);
+    if (fileSize > 1024 * 1024) {
+        $("#fileSize").html("文件大小:" + (Math.round(fileSize * 100 / (1024 * 1024)) / 100).toString() + 'MB');
+    }
+    else {
+        $("#fileSize").html("文件大小:" + (Math.round(fileSize * 100 / 1024) / 100).toString() + 'KB');
+    }
+};
