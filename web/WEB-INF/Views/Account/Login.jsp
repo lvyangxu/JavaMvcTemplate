@@ -15,10 +15,7 @@
     <script src="../Content/js/init.js"></script>
 </head>
 <body class="loginBody">
-    <mylogin transfer-url="../" username-cookie-name="mvcTemplateUsername" password-cookie-name="mvcTemplatePassword" mvc-client="java"></mylogin>
-
-    <myupload></myupload>
-    
+    <mylogin transfer-url="../" username-cookie-name="mvcTemplateUsername" password-cookie-name="mvcTemplatePassword" mvc-client="java"></mylogin>   
 </body>
 </html>
 

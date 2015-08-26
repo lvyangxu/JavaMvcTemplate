@@ -81,11 +81,12 @@ myModule.directive('mylogin', function () {
  * 自定义指令-文件上传简易面板
  * myupload 自定义指令的标签
  * upload-url 上传请求的服务器地址,可选,有值时请求该地址,未定义时取默认地址"../DataExchange/Upload"
+ * upload-width 控件的宽度,可选,默认值为300，单位为px
  */
 myModule.directive('myupload', function () {
     var directiveDefinitionObject = {
         template:
-                    "<span style=\"position: relative;height: 250px;width: 600px;display: inline-block;border:solid;border-color: yellowgreen\">" +
+                    "<span ng-style=\"uploadFrame\">" +
                         "<button class=\"btn btn-info\" ng-click=\"callSelectButton()\" ng-style=\"uploadDivStyle\">选择上传的文件</button>" +
                         "<div id=\"fileNum\" ng-style=\"uploadDivStyle\">选择的文件数量:</div>" +
                         "<div id=\"fileName\" ng-style=\"uploadDivStyle\">文件名:</div>" +
@@ -97,12 +98,17 @@ myModule.directive('myupload', function () {
         restrict: 'E',
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
             scope.uploadUrl = iAttrs.uploadUrl;
+            scope.uploadWidth = iAttrs.uploadWidth;
+            if(scope.uploadWidth==undefined){
+                scope.uploadWidth = 300;
+            }            
+            scope.uploadFrame = {"position": "relative","height": "250px","width":scope.uploadWidth+"px","display": "inline-block"};
         },
         controller: ("UploadController", ["$scope", function ($scope) {
                 $scope.callSelectButton = function () {
                     document.getElementById("selectUploadFile").click();
                 };
-                $scope.uploadDivStyle = {"margin-left": "25%", "width": "50%", "margin-top": "10px"};
+                $scope.uploadDivStyle = {"width": "100%", "margin-top": "10px"};
 
                 $scope.uploadFile = function () {
                     var fd = new FormData();
@@ -142,15 +148,15 @@ myModule.directive('myupload', function () {
                     } else {
                         alert("上传失败，服务器出现异常");
                     }
-                }
+                };
 
                 $scope.uploadFailed = function (evt) {
                     alert("上传失败");
-                }
+                };
 
                 $scope.uploadCanceled = function (evt) {
                     alert("上传操作已被用户或浏览器取消");
-                }
+                };
             }])
     };
     return directiveDefinitionObject;
