@@ -1,5 +1,5 @@
 ﻿/**
- * description 引用框架中的所有css和js
+ * description 引用框架中的css和js,为了加快响应速度,不引用angular
  * author lvyangxu
  * 2015-08-02
  */
@@ -27,10 +27,10 @@ function jsRefernce(jsPathArr) {
     return result;
 }
 
-var myCssPathArr = ["css/bootstrap.min.css", "css/bootstrap-theme.min.css", "css/module.css","css/owl.carousel.css","css/owl.theme.css"];
+var myCssPathArr = ["css/bootstrap.min.css", "css/bootstrap-theme.min.css","css/owl.carousel.css","css/owl.theme.css"];
 var cssString = cssRefernce(myCssPathArr);
 
-var myJsPathArr = ["js/jquery-2.1.4.min.js", "js/bootstrap.min.js", "js/angular-1.4.3.js", "js/data-model.js", "js/image-model.js", "js/communication-model.js", "js/module.js","js/owl.carousel.js"];
+var myJsPathArr = ["js/jquery-2.1.4.min.js", "js/bootstrap.min.js", "js/data-model.js", "js/image-model.js", "js/communication-model.js","js/owl.carousel.js"];
 var jsString = jsRefernce(myJsPathArr);
 
 //输出所有引用的内容

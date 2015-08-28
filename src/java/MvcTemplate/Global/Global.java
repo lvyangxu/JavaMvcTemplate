@@ -8,7 +8,10 @@ package MvcTemplate.Global;
 import MyJavaLibrary.DoLog4j;
 import MyJavaLibrary.DoMysql;
 import MyJavaLibrary.DoXml;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.websocket.Session;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -53,6 +56,7 @@ public class Global implements ApplicationListener<ApplicationEvent> {
     public static DoMysql.mysqlClass mysqlClass1;
     public static String webAppRootKey = "MvcRootDir";
     public static String usernameConfig = null, passwordConfig = null, usernameCookieNameConfig = null, passwordCookieNameConfig = null;
+    public static Map<String,Session> websocketSessionMap = new HashMap();
 
     private void applicationStartOrRefresh(){
         
@@ -81,6 +85,7 @@ public class Global implements ApplicationListener<ApplicationEvent> {
             usernameCookieNameConfig = nodeValueList.get(2);
             passwordCookieNameConfig = nodeValueList.get(3);
         }
+        
         
     }
     

@@ -19,3 +19,45 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
         failureCallback(textStatus);
     });
 };
+
+//初始化websocket连接
+function initWebSocket(receiveMessageCallback) {
+    //拼接websocket的访问地址
+    var baseUrl = window.location.href;
+    baseUrl = baseUrl.replace(/http:/g, "ws:");
+    var arr = baseUrl.split('/');
+    arr[arr.length - 1] = "";
+    arr[arr.length - 2] = "";
+    var websocketUrl = "";
+    for (var i = 0; i < arr.length - 2; i++) {
+        websocketUrl = websocketUrl + arr[i] + "/";
+    }
+    websocketUrl = websocketUrl + "WebSocket";
+    var webSocket = new WebSocket(websocketUrl);
+    webSocket.onerror = function (event) {
+        console.log("websocket发生异常:"+event.data);
+    };
+
+    webSocket.onopen = function (event) {
+
+    };
+
+    webSocket.onmessage = function (event) {
+        receiveMessageCallback(event.data);
+    };
+    
+     webSocket.onclose= function (event) {
+        console.log("websocket已关闭:"+event.data);
+    };
+    
+    return webSocket;
+}
+
+//
+function sendMessageByWebSocket(webSocket,receiveMessageCallback,message) {
+    if(webSocket.readyState!=1){
+        console.log(webSocket.readyState)
+        webSocket = initWebSocket(receiveMessageCallback);
+    };
+    webSocket.send(message);
+}     
