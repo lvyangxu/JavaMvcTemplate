@@ -24,12 +24,12 @@
         
         <script>
             
-        var webSocket =  initWebSocket(function(result){
+        initWebSocket(function(result){
             console.log(result);
         });
   
         function send(){
-            sendMessageByWebSocket(webSocket,function(result){
+            sendMessageByWebSocket(function(result){
                 console.log(result);
             },$("#message").val());
         }   

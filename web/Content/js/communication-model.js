@@ -55,23 +55,25 @@ function initWebSocket(receiveMessageCallback) {
         isNeedReconnect = true;
     };
 
+    webSocketArr.push(webSocket);
     return webSocket;
 }
 
 var isNeedReconnect = false;
+var webSocketArr = new Array();
 
 //
-function sendMessageByWebSocket(webSocket,receiveMessageCallback,message) {
-    
+function sendMessageByWebSocket(receiveMessageCallback,message) {
+    var webSocket = webSocketArr[webSocketArr.length-1];
     if (isNeedReconnect) {
         console.log(webSocket);
         console.log("断线重连");
-        webSocket = initWebSocket(function(){
+        webSocket = initWebSocket(function () {
             webSocket.send(message);
-            console.log(webSocket.readyState);
-        });        
-    } else{
-   
-    webSocket.send(message);
+            console.log(webSocketArr);
+        });
+    } else {
+
+        webSocket.send(message);
     }
 }     
