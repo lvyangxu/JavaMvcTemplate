@@ -29,11 +29,12 @@
         });
   
         function send(){
-            sendMessageByWebSocket(webSocket,
-            function(result){
+            sendMessageByWebSocket(webSocket,function(result){
                 console.log(result);
             },$("#message").val());
-        }           
+        }   
+        
+
             
             </script>
         

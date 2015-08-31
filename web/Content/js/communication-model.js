@@ -18,6 +18,7 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
         failureCallback(textStatus);
     });
+    return request;
 };
 
 //初始化websocket连接
@@ -35,29 +36,42 @@ function initWebSocket(receiveMessageCallback) {
     websocketUrl = websocketUrl + "WebSocket";
     var webSocket = new WebSocket(websocketUrl);
     webSocket.onerror = function (event) {
-        console.log("websocket发生异常:"+event.data);
+        console.log("websocket发生异常:"+event);
     };
 
     webSocket.onopen = function (event) {
-
+        console.log("websocket已连接");
+        isNeedReconnect = false;
+        receiveMessageCallback(event);
     };
-
+      
     webSocket.onmessage = function (event) {
-        receiveMessageCallback(event.data);
+    //    receiveMessageCallback(event);
+      console.log(event.data);  
     };
     
      webSocket.onclose= function (event) {
-        console.log("websocket已关闭:"+event.data);
+        console.log("websocket已关闭:"+event);
+        isNeedReconnect = true;
     };
-    
+
     return webSocket;
 }
 
+var isNeedReconnect = false;
+
 //
 function sendMessageByWebSocket(webSocket,receiveMessageCallback,message) {
-    if(webSocket.readyState!=1){
-        console.log(webSocket.readyState)
-        webSocket = initWebSocket(receiveMessageCallback);
-    };
+    
+    if (isNeedReconnect) {
+        console.log(webSocket);
+        console.log("断线重连");
+        webSocket = initWebSocket(function(){
+            webSocket.send(message);
+            console.log(webSocket.readyState);
+        });        
+    } else{
+   
     webSocket.send(message);
+    }
 }     
