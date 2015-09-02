@@ -22,7 +22,7 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
 };
 
 //初始化websocket连接
-function initWebSocket(receiveMessageCallback) {
+function initWebSocket(openCallback,receiveMessageCallback) {
     //拼接websocket的访问地址
     var baseUrl = window.location.href;
     baseUrl = baseUrl.replace(/http:/g, "ws:");
@@ -42,12 +42,11 @@ function initWebSocket(receiveMessageCallback) {
     webSocket.onopen = function (event) {
         console.log("websocket已连接");
         isNeedReconnect = false;
-        receiveMessageCallback(event);
+        openCallback();
     };
       
     webSocket.onmessage = function (event) {
-    //    receiveMessageCallback(event);
-      console.log(event.data);  
+        receiveMessageCallback(event.data);
     };
     
      webSocket.onclose= function (event) {
@@ -68,12 +67,13 @@ function sendMessageByWebSocket(receiveMessageCallback,message) {
     if (isNeedReconnect) {
         console.log(webSocket);
         console.log("断线重连");
-        webSocket = initWebSocket(function () {
+        webSocket = initWebSocket(function(){
             webSocket.send(message);
-            console.log(webSocketArr);
+        },function (result) {
+            console.log("收到消息:"+result);
         });
+         
     } else {
-
         webSocket.send(message);
     }
 }     

@@ -24,7 +24,9 @@
         
         <script>
             
-        initWebSocket(function(result){
+        initWebSocket(function(){
+            
+        },function(result){
             console.log(result);
         });
   
