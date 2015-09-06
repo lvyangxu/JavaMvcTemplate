@@ -6,6 +6,7 @@
 package MvcTemplate.Controllers;
 
 import MvcTemplate.Global.Global;
+import MyJavaLibrary.DoDataTranslation;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.websocket.CloseReason;
@@ -15,6 +16,7 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import org.json.JSONObject;
 
 /**
  *
@@ -23,14 +25,29 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/WebSocket")
 public class WebSocketController {
     
+  DoDataTranslation DoDataTranslation1 = new DoDataTranslation();
+    
   @OnMessage
-  public void onMessage(String message,Session session){  
+  public void onMessage(String websocketMessage,Session session){  
         try {
-            Global.businessLogger.info("收到用户"+session.getId()+"消息:"+message);
+            Global.businessLogger.info("收到用户"+session.getId()+"消息:"+websocketMessage);
             
             //收到消息后的业务逻辑 
             for (Map.Entry<String, Session> entry : Global.websocketSessionMap.entrySet()) {
-                entry.getValue().getBasicRemote().sendText("服务器已接收消息：" + message);
+                JSONObject  JSONObject1 = new JSONObject(websocketMessage);
+                try {
+                    String type = JSONObject1.getString("type");
+                    if(type.equals("login")){
+                    
+                    }else{
+                        String message  =  JSONObject1.getString("message");
+                        message = DoDataTranslation1.base64Decode(message);
+                        entry.getValue().getBasicRemote().sendText("服务器已接收消息：" + message);
+                    }
+                    
+                } catch (Exception e) {
+                    entry.getValue().getBasicRemote().sendText("服务器解析消息格式时出错"+ websocketMessage);
+                }
             }
             
         } catch (Exception e) {

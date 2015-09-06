@@ -316,6 +316,14 @@ function MD5Encode32(content) {
     });
 })(jQuery);
 
+//自定义消息格式，封装为{"type":"","message":"base64Encode()"}格式的消息，主要用于websocket
+function myMessageEncode(type,message){
+    message = base64Encode(message);
+    var result = "{\"type\":\""+type+"\",\"message\":\""+message+"\"}";
+    return result;
+}
+
+
 ///根据cookie名称获取cookie的值,参数为cookie名称
 function getCookie(cookieName) {
     if (document.cookie.length > 0) {
