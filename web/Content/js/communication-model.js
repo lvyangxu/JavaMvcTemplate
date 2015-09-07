@@ -23,9 +23,9 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
 
 
 /*
- * websocket对象封装
+ * websocket对象封装，参数分别为服务器地址、用户名、密码、打开websocket后的回调、接收消息后的回调
  */
-function MyWebsocket(url,openCallback,receiveMessageCallback){
+function MyWebsocket(url,username,password,openCallback,receiveMessageCallback){
     //拼接websocket的访问地址
     var baseUrl = window.location.href;
     baseUrl = baseUrl.replace(/http:/g, "ws:");
@@ -41,23 +41,30 @@ function MyWebsocket(url,openCallback,receiveMessageCallback){
              
     //初始化websocket连接
     var webSocket = new WebSocket(this.url);
-    websocketEventHandler(webSocket,openCallback,receiveMessageCallback);
-    
+    this.receiveMessageCallback = receiveMessageCallback;
+    this.websocketEventHandler(webSocket,openCallback);    
     this.webSocket = webSocket;
+    this.username = username;
+    this.password = password;
+    
+    //向服务器端发送登录消息确定身份
+    this.login();
+    
 }
 
 //websocket事件处理handler
-function websocketEventHandler(webSocket,openCallback,receiveMessageCallback){
+MyWebsocket.prototype.websocketEventHandler = function(webSocket,openCallback){
+    var myWebsocket = this;
     webSocket.onerror = function (event) {
         console.log("websocket发生异常:"+event);
     };
     webSocket.onopen = function (event) {
         console.log("websocket已连接");
-        openCallback(webSocket);
+        openCallback(myWebsocket);
     };
       
     webSocket.onmessage = function (event) {
-        receiveMessageCallback(event.data);
+        myWebsocket.receiveMessageCallback(event.data);
     };
     
      webSocket.onclose= function (event) {
@@ -68,35 +75,33 @@ function websocketEventHandler(webSocket,openCallback,receiveMessageCallback){
 //断线重连
 MyWebsocket.prototype.reconnect = function(openCallback,receiveMessageCallback){
     var webSocket = new WebSocket(this.url);
-    websocketEventHandler(webSocket,openCallback,receiveMessageCallback);
+    this.websocketEventHandler(webSocket,openCallback,receiveMessageCallback);
     this.webSocket = webSocket;  
 }
 
-//发送消息
-MyWebsocket.prototype.login =function(receiveMessageCallback,message) {
+//登录
+MyWebsocket.prototype.login =function() {
     if (this.webSocket.readyState != 1) {
-        console.log("websocket失效,已重新连接");
-        var webSocket = this.webSocket;
-        //确保在新的websocket重连上再发送消息
-        this.reconnect(function(webSocket){
-            webSocket.send(myMessageEncode("login",message));
-        },receiveMessageCallback);              
+        //websocket连上再发送消息
+        this.reconnect(function(myWebsocket){
+            myWebsocket.webSocket.send(myMessageEncode(myWebsocket.username,myWebsocket.password,"login",""));
+        },this.receiveMessageCallback);              
     } else {
-        this.webSocket.send(myMessageEncode("login",message));
+        this.webSocket.send(myMessageEncode(this.username,this.password,"login",""));
     }
 }
 
-//发送消息
-MyWebsocket.prototype.sendMessage =function(receiveMessageCallback,message) {
+///发送消息,参数分别为接收消息后的回调
+MyWebsocket.prototype.sendMessage =function(message) {
     if (this.webSocket.readyState != 1) {
-        console.log("websocket失效,已重新连接");
+        console.log("websocket失效,尝试重连");
         var webSocket = this.webSocket;
         //确保在新的websocket重连上再发送消息
-        this.reconnect(function(webSocket){
-            webSocket.send(myMessageEncode("content",message));
-        },receiveMessageCallback);              
+        this.reconnect(function(myWebsocket){
+            myWebsocket.webSocket.send(myMessageEncode(myWebsocket.username,myWebsocket.password,"content",message));
+        },this.receiveMessageCallback);              
     } else {
-        this.webSocket.send(myMessageEncode("content",message));
+        this.webSocket.send(myMessageEncode(this.username,this.password,"content",message));
     }
 }     
 

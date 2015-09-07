@@ -316,10 +316,13 @@ function MD5Encode32(content) {
     });
 })(jQuery);
 
-//自定义消息格式，封装为{"type":"","message":"base64Encode()"}格式的消息，主要用于websocket
-function myMessageEncode(type,message){
+//自定义消息格式，封装为{"username":"","password":"","type":"","message":"base64Encode()"}格式的消息，主要用于websocket
+function myMessageEncode(username,password,type,message){
+    username = base64Encode(username);
+    password = base64Encode(password);
+    type = base64Encode(type);
     message = base64Encode(message);
-    var result = "{\"type\":\""+type+"\",\"message\":\""+message+"\"}";
+    var result = "{\"username\":\""+username+"\",\"password\":\""+password+"\",\"type\":\""+type+"\",\"message\":\""+message+"\"}";
     return result;
 }
 

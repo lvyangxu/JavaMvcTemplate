@@ -24,14 +24,18 @@
         
         <script>
             
-        var MyWebsocket = new MyWebsocket("WebSocket",function(){},function(result){
-            console.log(result);
+        var MyWebsocket = new MyWebsocket("WebSocket","test","test",function(){},function(result){
+            alert(result.length);
         });    
   
         function send(){
-            MyWebsocket.sendMessage(function(result){
-                console.log(result);
-            },$("#message").val());
+           // MyWebsocket.sendMessage($("#message").val()); 
+        var t = "";
+        for(var i=0;i<10000;i++){
+            t = t+ "1";
+        }    
+        
+        MyWebsocket.sendMessage(t); 
         }   
         
 
