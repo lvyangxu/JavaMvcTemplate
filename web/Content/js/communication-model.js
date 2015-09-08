@@ -26,6 +26,11 @@ function doAjaxInJquery(url, httpRequestType, requestTimeOutSecond, requestParaD
  * websocket对象封装，参数分别为服务器地址、用户名、密码、打开websocket后的回调、接收消息后的回调
  */
 function MyWebsocket(url,username,password,openCallback,receiveMessageCallback){
+    if(!window.WebSocket){
+        alert("你的浏览器不支持websocket");
+        return;
+    }
+    
     //拼接websocket的访问地址
     var baseUrl = window.location.href;
     baseUrl = baseUrl.replace(/http:/g, "ws:");
@@ -47,8 +52,6 @@ function MyWebsocket(url,username,password,openCallback,receiveMessageCallback){
     this.username = username;
     this.password = password;
     
-    //向服务器端发送登录消息确定身份
-    this.login();
     
 }
 
@@ -79,29 +82,42 @@ MyWebsocket.prototype.reconnect = function(openCallback,receiveMessageCallback){
     this.webSocket = webSocket;  
 }
 
-//登录
-MyWebsocket.prototype.login =function() {
-    if (this.webSocket.readyState != 1) {
-        //websocket连上再发送消息
-        this.reconnect(function(myWebsocket){
-            myWebsocket.webSocket.send(myMessageEncode(myWebsocket.username,myWebsocket.password,"login",""));
-        },this.receiveMessageCallback);              
-    } else {
-        this.webSocket.send(myMessageEncode(this.username,this.password,"login",""));
-    }
-}
 
-///发送消息,参数分别为接收消息后的回调
+///发送消息,参数分别为接收消息后的回调（超过128*64=8192个字符会抛出1009）
 MyWebsocket.prototype.sendMessage =function(message) {
     if (this.webSocket.readyState != 1) {
         console.log("websocket失效,尝试重连");
         var webSocket = this.webSocket;
         //确保在新的websocket重连上再发送消息
         this.reconnect(function(myWebsocket){
-            myWebsocket.webSocket.send(myMessageEncode(myWebsocket.username,myWebsocket.password,"content",message));
-        },this.receiveMessageCallback);              
+            var result = myMessageEncode(myWebsocket.username, myWebsocket.password, "content", message);
+            if (result.length <= 8192) {
+                myWebsocket.webSocket.send(result);
+            } else {
+                for (var i = 0; i < result.length / 8192; i++) {
+                    if (result.substring(i * 8192).length > 8192) {
+                        myWebsocket.webSocket.send(result.substring(i * 8192, (i + 1) * 8192 - 1));
+                    } else {
+                        myWebsocket.webSocket.send(result.substring(i * 8192));
+                    }
+                }
+            }
+        }, this.receiveMessageCallback);
     } else {
-        this.webSocket.send(myMessageEncode(this.username,this.password,"content",message));
+        var result = myMessageEncode(this.username, this.password, "content", message);
+        if (result.length <= 8192) {
+            this.webSocket.send(result);
+        } else {
+            for (var i = 0; i < result.length / 8192; i++) {
+                if (result.substring(i * 8192).length > 8192) {
+                    this.webSocket.send(result.substring(i * 8192, (i + 1) * 8192 - 1));
+                } else {
+                    this.webSocket.send(result.substring(i * 8192));
+                }
+            }
+        }
+
+
     }
 }     
 

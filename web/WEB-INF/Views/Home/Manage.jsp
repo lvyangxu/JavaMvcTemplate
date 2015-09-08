@@ -23,21 +23,21 @@
         
         
         <script>
-            
+
         var MyWebsocket = new MyWebsocket("WebSocket","test","test",function(){},function(result){
-            alert(result.length);
+            console.log(result);
         });    
   
         function send(){
-           // MyWebsocket.sendMessage($("#message").val()); 
-        var t = "";
-        for(var i=0;i<10000;i++){
-            t = t+ "1";
-        }    
-        
-        MyWebsocket.sendMessage(t); 
+            MyWebsocket.sendMessage($("#message").val()); 
+//        var t = "";
+//        for(var i=0;i<10000;i++){
+//            t = t+ "1";
+//        }    
+//        
+//        MyWebsocket.sendMessage(t); 
         }   
-        
+
 
             
             </script>

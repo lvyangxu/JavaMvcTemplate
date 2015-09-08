@@ -7,6 +7,7 @@ package MvcTemplate.Global;
 
 import MyJavaLibrary.DoLog4j;
 import MyJavaLibrary.DoMysql;
+import MyJavaLibrary.DoWebSocket;
 import MyJavaLibrary.DoXml;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Global implements ApplicationListener<ApplicationEvent> {
     public static DoMysql.mysqlClass mysqlClass1;
     public static String webAppRootKey = "MvcRootDir";
     public static String usernameConfig = null, passwordConfig = null, usernameCookieNameConfig = null, passwordCookieNameConfig = null;
-    public static Map<String,Session> websocketSessionMap = new HashMap();
+    public static Map<String,DoWebSocket.myWebSocketClass> websocketMap = new HashMap();
 
     private void applicationStartOrRefresh(){
         
