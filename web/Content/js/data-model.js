@@ -353,3 +353,17 @@ function setCookie(cookieName, cookieValue, expiredays) {
     var exdateStr = (expiredays == null) ? "" : ";expires=" + exdate.toGMTString();    
     document.cookie = cookieName + "=" + escape(cookieValue) + exdateStr+";path=/";
 }
+
+//获取本地时间
+function getLocalTime(addDays) {
+    var d = new Date();
+    d.setDate(d.getDate() + addDays);
+    var vYear = d.getFullYear();
+    var vMon = d.getMonth() + 1;
+    var vDay = d.getDate();
+    var h = d.getHours();
+    var m = d.getMinutes();
+    var se = d.getSeconds();
+    s = vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m); //+ (se < 10 ? "0" + se : se);
+    return s;
+}

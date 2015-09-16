@@ -12,7 +12,7 @@ function cssRefernce(cssPathArr) {
     var result = "";
     for (var i = 0; i < cssPathArr.length; i++) {
         var cssPath = cssPathArr[i];
-        result = result + "<link rel=\"stylesheet\" href=\"" + relativePath + cssPath + "\">";
+        result = result + "<link rel=\"stylesheet\" href=\"" + relativePath + "css/" + cssPath + "\">";
     }    
     return result;
 }
@@ -22,15 +22,15 @@ function jsRefernce(jsPathArr) {
     var result = "";
     for (var i = 0; i < jsPathArr.length; i++) {
         var jsPath = jsPathArr[i];
-        result = result + "<script src=\"" + relativePath + jsPath + "\"></script>";
+        result = result + "<script src=\"" + relativePath +"js/"+ jsPath + "\"></script>";
     }
     return result;
 }
 
-var myCssPathArr = ["css/bootstrap.min.css", "css/bootstrap-theme.min.css","css/owl.carousel.css","css/owl.theme.css"];
+var myCssPathArr = ["bootstrap.min.css", "bootstrap-theme.min.css","owl.carousel.css","owl.theme.css"];
 var cssString = cssRefernce(myCssPathArr);
 
-var myJsPathArr = ["js/jquery-2.1.4.min.js", "js/bootstrap.min.js", "js/data-model.js", "js/image-model.js", "js/communication-model.js","js/owl.carousel.js"];
+var myJsPathArr = ["jquery-2.1.4.min.js", "bootstrap.min.js", "data-model.js", "image-model.js", "communication-model.js","owl.carousel.js","skrollr.min.js"];
 var jsString = jsRefernce(myJsPathArr);
 
 //输出所有引用的内容

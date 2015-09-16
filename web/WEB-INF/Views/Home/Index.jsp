@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html ng-app="myAngular">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
@@ -26,18 +26,28 @@
         
     </head>
     <body>
-        <div class="b">
-     
+        <div class="b" id="0">
+        </div>    
+        <div class="b" id="1">
         </div>
-        <div class="b">
-     
-        </div>         
+        <div class="b" id="2">
+        </div>
+        <div class="b" id="3">
+        </div>        
 
     </body>
     
     <script>
+    disableAutoScrolling();
 $(".b").height($(window).height());
-
+window.onscroll = function(){
+    var location = document.body.scrollTop;
+    var i = parseInt($(window).height()/location);
+    i = i +1 ;
+//    window.location.href = "#"+i;
+    
+        
+}
         </script>
     
 </html>
