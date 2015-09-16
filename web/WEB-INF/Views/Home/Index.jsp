@@ -12,9 +12,32 @@
         <title>JSP Page</title>
         <link rel="icon" href="../Content/images/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="../Content/images/favicon.ico" type="image/x-icon" />
-        <script src="../Content/js/initMobile.js"></script>        
+        <script src="../Content/js/init.js"></script>        
+        
+<style>
+
+
+    .b{
+        background-image: url("../Content/images/favicon.ico");
+        background-size: 100% 100%;
+    }
+
+</style>        
+        
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class="b">
+     
+        </div>
+        <div class="b">
+     
+        </div>         
+
     </body>
+    
+    <script>
+$(".b").height($(window).height());
+
+        </script>
+    
 </html>
