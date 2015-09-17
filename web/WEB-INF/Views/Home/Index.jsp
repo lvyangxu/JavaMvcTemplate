@@ -17,37 +17,28 @@
 <style>
 
 
-    .b{
-        background-image: url("../Content/images/favicon.ico");
-        background-size: 100% 100%;
-    }
+
 
 </style>        
         
     </head>
     <body>
-        <div class="b" id="0">
-        </div>    
-        <div class="b" id="1">
-        </div>
-        <div class="b" id="2">
-        </div>
-        <div class="b" id="3">
-        </div>        
+        
+<div id="fullpage">
+    <div class="section" ng-repeat="section in [1,2,3,4,5]">Some section{{section}}</div>
 
+</div>
     </body>
     
     <script>
-    disableAutoScrolling();
-$(".b").height($(window).height());
-window.onscroll = function(){
-    var location = document.body.scrollTop;
-    var i = parseInt($(window).height()/location);
-    i = i +1 ;
-//    window.location.href = "#"+i;
-    
-        
-}
+ 
+
+
+$(document).ready(function() {
+    $('#fullpage').fullpage();
+});
+
+
         </script>
     
 </html>
