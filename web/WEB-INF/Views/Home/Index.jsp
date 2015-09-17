@@ -35,7 +35,9 @@
 
 
 $(document).ready(function() {
-    $('#fullpage').fullpage();
+    $('#fullpage').fullpage({
+css3:true
+    });
 });
 
 
