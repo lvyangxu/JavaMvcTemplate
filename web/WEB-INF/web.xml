@@ -21,6 +21,7 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/Content/*</url-pattern>
+        <url-pattern>/ApplicationData/*</url-pattern>
     </servlet-mapping>
     
     <session-config>

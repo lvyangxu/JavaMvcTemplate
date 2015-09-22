@@ -18,27 +18,23 @@
 
 
 
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
 
-</style>        
+</style>       
         
     </head>
     <body>
-        
-<div id="fullpage">
-    <div class="section" ng-repeat="section in [1,2,3,4,5]">Some section{{section}}</div>
 
-</div>
+
     </body>
     
     <script>
- 
-
-
-$(document).ready(function() {
-    $('#fullpage').fullpage({
-css3:true
-    });
-});
+ d3.select("body").transition()
+    .style("background-color", "black");
 
 
         </script>
