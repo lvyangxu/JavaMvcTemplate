@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html ng-app="myAngular">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <link rel="icon" href="../Content/images/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="../Content/images/favicon.ico" type="image/x-icon" />
+        <script src="../Content/js/init.js"></script>       
+        
+        <style>
+            
+            /*顶部导航栏*/
+            .top-nav{
+                position: fixed;
+                width: 100%;
+                height: 50px;
+                background-color:#3b291f;
+                line-height: 50px;
+                color: white;
+            }
+            
+            /*顶部导航栏*/
+            .top-nav>.nav-brand{
+                font-size: 120%;
+                font-weight: bold;
+                padding-left: 10px;
+                float: left;              
+                
+            }
+            
+            .top-nav>.nav-route{              
+                
+                text-align: center;
+
+            }               
+            
+            .top-nav>.nav-account{
+                float: right;
+                padding-right: 20px;
+            }
+
+         
+            
+            .top-nav>.nav-route>span{
+                height: 100%;
+                color: white;
+                font-size: 150%;             
+                padding-left: 3%;
+                padding-right: 3%;
+                
+            }
+            
+            .top-nav>.nav-route>span:hover{
+                cursor:pointer;
+                background-color:#1b6d85;
+            }
+
+
+            
+            .left-nav{
+                position: fixed;
+                font-size: 150%; 
+                width: 200px;
+                height: 100%;
+                top:50px;
+                background-color: #f5f6f7;
+                text-align: center;
+            }
+
+            .left-nav>a>div{
+                line-height: 50px;
+                margin-top: 0px;
+                margin-bottom: 0px;               
+            }
+            .left-nav>a>div:hover{
+                background-color: #868687;
+                line-height:55px;
+                transition:line-height 0.5s,background-color 0.5s; 
+                transition-timing-function: ease-in;
+            }             
+            
+            .content{
+                padding-top: 50px;
+                padding-left: 200px;
+            }
+            
+            .content>nav>section{
+                height: 2000px;
+            }
+            
+            </style>
+        
+    </head>
+    <body>
+        
+        <div ng-controller="MyLayoutController">
+            <nav class="top-nav">
+                <div class="nav-brand">RadiumGames Business Information System</div>
+                <div class="nav-route">                      
+                    <span ng-repeat="routeName in routeNames" ui-sref="{{routeName}}">{{routeName}}</span>
+                </div>    
+                <div class="nav-account">
+                    welcome,karl
+                </div>
+            </nav>
+
+            <nav class="left-nav"> 
+                <a href={{leftNavItem.href}} ng-repeat="leftNavItem in leftNavItems">{{leftNavItem.name}}</a>                         
+            </nav>
+
+
+            <div class="content">
+                <section ui-view></section>
+            </div>
+        <script>
+
+myModule.config(function($stateProvider, $urlRouterProvider) {
+     var routeNames = ["Operation","Market","Financing"];
+for(var i=0;i<routeNames.length;i++){
+ $stateProvider.state(routeNames[i], {
+     templateUrl:routeNames[i]+"/"+routeNames[i],
+ });
+ }
+    });
+
+              myModule.controller('MyLayoutController',['$scope',function($scope){                      
+                   $scope.routeNames = ["Operation","Market","Financing"];                     
+              }]);
+              
+              
+
+
+            
+            </script>
+        
+
+        
+        
+    </body>
+</html>
+

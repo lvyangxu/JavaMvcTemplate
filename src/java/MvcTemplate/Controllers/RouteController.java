@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RouteController {
 
     @RequestMapping(value = {"{controller}/{action}"})
-    public String defaultWebSite(@PathVariable String controller,@PathVariable String action) {
+    public String routeController(@PathVariable String controller,@PathVariable String action) {
         return "/"+controller+"/"+action;
+    }
+    
+    @RequestMapping(value = {"{controller}/{action}/{children}"})
+    public String routeController1(@PathVariable String controller,@PathVariable String action,@PathVariable String children) {
+        return "/"+controller+"/"+action+"/"+children;
     }
 
 }

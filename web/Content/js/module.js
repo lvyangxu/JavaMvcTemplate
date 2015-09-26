@@ -4,7 +4,7 @@
  * 2015-08-13
  */
 
-var myModule = angular.module("myAngular", []);
+var myModule = angular.module("myAngular", ['ui.router']);
 
 /**
  * 自定义指令-登录框

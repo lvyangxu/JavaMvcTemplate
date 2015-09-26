@@ -41,7 +41,7 @@
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           p:prefix="/WEB-INF/Views/"
-          p:suffix=".jsp" />
+          p:suffix=".html" />
 
  
 

@@ -22,6 +22,7 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/Content/*</url-pattern>
         <url-pattern>/ApplicationData/*</url-pattern>
+        <url-pattern>/WEB-INF/Views/*</url-pattern>
     </servlet-mapping>
     
     <session-config>
