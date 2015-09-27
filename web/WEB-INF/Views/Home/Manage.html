@@ -15,8 +15,8 @@
                 width: 100%;
                 height: 50px;
                 background-color:#3b291f;
-                line-height: 50px;
                 color: white;
+                line-height: 50px;
             }
             
             /*顶部导航栏*/
@@ -28,8 +28,8 @@
                 
             }
             
-            .top-nav>.nav-route{              
-                
+            .top-nav>.nav-route{         
+                height: 50px;
                 text-align: center;
 
             }               
@@ -41,20 +41,23 @@
 
          
             
-            .top-nav>.nav-route>span{
-                height: 100%;
+            .top-nav>.nav-route>div{
+                float: left;
                 color: white;
                 font-size: 150%;             
                 padding-left: 3%;
                 padding-right: 3%;
-                
+                padding-bottom: 0px;
             }
             
-            .top-nav>.nav-route>span:hover{
+            .top-nav>.nav-route>div:first-child{            
+                margin-left: 5%;
+            }            
+         
+            .top-nav>.nav-route>div:hover{
+                background-color:#666600;
                 cursor:pointer;
-                background-color:#1b6d85;
             }
-
 
             
             .left-nav{
@@ -97,7 +100,7 @@
             <nav class="top-nav">
                 <div class="nav-brand">RadiumGames Business Information System</div>
                 <div class="nav-route">                      
-                    <span ng-repeat="routeName in routeNames" ui-sref="{{routeName}}">{{routeName}}</span>
+                    <div ng-repeat="routeName in routeNames" ui-sref="{{routeName}}">{{routeName}}</div>
                 </div>    
                 <div class="nav-account">
                     welcome,karl
