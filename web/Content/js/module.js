@@ -185,3 +185,127 @@ function fileSelected() {
         $("#fileSize").html("文件大小:" + (Math.round(fileSize * 100 / 1024) / 100).toString() + 'KB');
     }
 };
+
+/**
+ * 自定义指令-顶部固定导航栏
+ * mynavbar 自定义指令的标签
+ * route-names 导航列表,以","分隔
+ */
+myModule.directive('mytopnavbar', function () {
+    var directiveDefinitionObject = {
+        template:
+            "<nav ng-style='topNav'>"+
+                "<div ng-style='topNavBrand'>RadiumGames Business Information System</div>"+
+                "<div ng-style='navRoute'>"+
+                    "<div class='topNavItem' ng-style='navItem' ng-click='doNav(route)' ng-class='{true:\"topNavActive\"}[route.isActive]' ng-repeat='route in routes' ui-sref='{{route.routeName}}'>"+
+                        "{{route.routeName}}"+
+                    "</div>"+
+                "</div>"+
+                "<div ng-style='topNavAccount'>"+
+                    "welcome,karl"+
+                "</div>"+
+            "</nav>",
+        restrict: 'E',
+        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+            scope.routeNames = iAttrs.routeNames.split(',');     
+            scope.routes = new Array();
+            for (var i = 0; i < scope.routeNames.length; i++) {
+                if (i == 0) {
+                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": true});
+                } else {
+                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": false});
+                }
+                $rootScope.routeName.push(scope.routeNames[i]);
+            }
+            scope.$on()
+        },
+        controller: ("TopNavController", ["$scope", function ($scope) {
+                $scope.topNav = {"position":"fixed","width":"100%","height":"50px","background-color":"#31b0d5","color": "white","line-height":"50px"};
+                $scope.topNavBrand = {"font-size":"120%","font-weight":"bold","padding-left":"10px","float":"left"};
+                $scope.navRoute={"height":"50px","text-align":"center"};
+                $scope.navItem={"float":"left","color":"white","font-size": "150%", "padding-left": "3%","padding-right":"3%"};
+                $scope.topNavAccount={"float":"right","padding-right":"20px"};
+                
+                $scope.doNav = function (route) {
+                    angular.forEach($scope.routes, function (eachRoute) {
+                        if (eachRoute == route) {
+                            eachRoute.isActive = true;
+                        } else {
+                            eachRoute.isActive = false;
+                        }
+                    });
+                }
+                
+            }])
+    };
+    return directiveDefinitionObject;
+});
+
+
+myModule.config(function ($stateProvider, $urlRouterProvider) {
+    for (var i = 0; i < $rootScope.routeName.length; i++) {
+        $stateProvider.state($rootScope.routeName, {
+            templateUrl: $rootScope.routeName[i] + "/" + $rootScope.routeName[i]
+        });
+    }
+}); 
+
+/**
+ * 自定义指令-顶部固定导航栏
+ * mynavbar 自定义指令的标签
+ * route-names 导航列表,以","分隔
+ */
+//myModule.directive('myleftnavbar', function () {
+//    var directiveDefinitionObject = {
+//        template:
+//            "<nav ng-style='topNav'>"+
+//                "<div ng-style='topNavBrand'>RadiumGames Business Information System</div>"+
+//                "<div ng-style='navRoute'>"+
+//                    "<div class='topNavItem' ng-style='navItem' ng-click='doNav(route)' ng-class='{true:\"topNavActive\"}[route.isActive]' ng-repeat='route in routes' ui-sref='{{route.routeName}}'>"+
+//                        "{{route.routeName}}"+
+//                    "</div>"+
+//                "</div>"+
+//                "<div ng-style='topNavAccount'>"+
+//                    "welcome,karl"+
+//                "</div>"+
+//            "</nav>",
+//        restrict: 'E',
+//        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+//            scope.routeNames = iAttrs.routeNames.split(',');     
+//            scope.routes = new Array();
+//            for (var i = 0; i < scope.routeNames.length; i++) {
+//                if (i == 0) {
+//                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": true});
+//                } else {
+//                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": false});
+//                }
+//            }
+////            myModule.config(function ($stateProvider, $urlRouterProvider) {
+////                for (var i = 0; i < scope.routeNames.length; i++) {
+////                    $stateProvider.state(scope.routeNames[i], {
+////                        templateUrl: scope.routeNames[i] + "/" + scope.routeNames[i]
+////                    });
+////                }
+////            });            
+//        },
+//        controller: ("LeftNavController", ["$scope", function ($scope) {
+//                $scope.topNav = {"position":"fixed","width":"100%","height":"50px","background-color":"#31b0d5","color": "white","line-height":"50px"};
+//                $scope.topNavBrand = {"font-size":"120%","font-weight":"bold","padding-left":"10px","float":"left"};
+//                $scope.navRoute={"height":"50px","text-align":"center"};
+//                $scope.navItem={"float":"left","color":"white","font-size": "150%", "padding-left": "3%","padding-right":"3%"};
+//                $scope.topNavAccount={"float":"right","padding-right":"20px"};
+//                
+//                $scope.doNav = function (route) {
+//                    angular.forEach($scope.routes, function (eachRoute) {
+//                        if (eachRoute == route) {
+//                            eachRoute.isActive = true;
+//                        } else {
+//                            eachRoute.isActive = false;
+//                        }
+//                    });
+//                }
+//                
+//            }])
+//    };
+//    return directiveDefinitionObject;
+//});

@@ -15,3 +15,15 @@
 }
 
 /*上传控件样式*/
+
+/*导航栏样式*/
+.topNavActive{
+    background-color:#b7aa00;
+}
+.topNavItem:first-child{            
+    margin-left: 5%;
+}     
+.topNavItem:hover{
+    background-color:#9acfea;
+    cursor:pointer;
+}

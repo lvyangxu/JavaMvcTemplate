@@ -2,65 +2,14 @@
 <html ng-app="myAngular">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title></title>
         <link rel="icon" href="../Content/images/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="../Content/images/favicon.ico" type="image/x-icon" />
         <script src="../Content/js/init.js"></script>       
         
-        <style>
+        <style>          
             
-            /*顶部导航栏*/
-            .top-nav{
-                position: fixed;
-                width: 100%;
-                height: 50px;
-                background-color:#3b291f;
-                color: white;
-                line-height: 50px;
-            }
-            
-            /*顶部导航栏*/
-            .top-nav>.nav-brand{
-                font-size: 120%;
-                font-weight: bold;
-                padding-left: 10px;
-                float: left;              
-                
-            }
-            
-            .top-nav>.nav-route{         
-                height: 50px;
-                text-align: center;
-
-            }               
-            
-            .top-nav>.nav-account{
-                float: right;
-                padding-right: 20px;
-            }
-
-         
-            
-            .top-nav>.nav-route>div{
-                float: left;
-                color: white;
-                font-size: 150%;             
-                padding-left: 3%;
-                padding-right: 3%;
-                padding-bottom: 0px;
-            }
-            
-            .top-nav>.nav-route>div:first-child{            
-                margin-left: 5%;
-            }            
-         
-            .top-nav>.nav-route>div:hover{
-                background-color:#666600;
-                cursor:pointer;
-            }
-
-            
-            .left-nav{
+/*            .left-nav{
                 position: fixed;
                 font-size: 150%; 
                 width: 200px;
@@ -80,7 +29,9 @@
                 line-height:55px;
                 transition:line-height 0.5s,background-color 0.5s; 
                 transition-timing-function: ease-in;
-            }             
+            }             */
+            
+  
             
             .content{
                 padding-top: 50px;
@@ -96,39 +47,20 @@
     </head>
     <body>
         
-        <div ng-controller="MyLayoutController">
-            <nav class="top-nav">
-                <div class="nav-brand">RadiumGames Business Information System</div>
-                <div class="nav-route">                      
-                    <div ng-repeat="routeName in routeNames" ui-sref="{{routeName}}">{{routeName}}</div>
-                </div>    
-                <div class="nav-account">
-                    welcome,karl
-                </div>
-            </nav>
-
-            <nav class="left-nav"> 
+        
+            <mytopnavbar route-names="Operation,Market,Financing"></mytopnavbar>
+<!--            <nav class="left-nav"> 
                 <a href={{leftNavItem.href}} ng-repeat="leftNavItem in leftNavItems">{{leftNavItem.name}}</a>                         
             </nav>
 
 
-            <div class="content">
+-->            <div class="content">
                 <section ui-view></section>
             </div>
         <script>
 
-myModule.config(function($stateProvider, $urlRouterProvider) {
-     var routeNames = ["Operation","Market","Financing"];
-for(var i=0;i<routeNames.length;i++){
- $stateProvider.state(routeNames[i], {
-     templateUrl:routeNames[i]+"/"+routeNames[i],
- });
- }
-    });
-
-              myModule.controller('MyLayoutController',['$scope',function($scope){                      
-                   $scope.routeNames = ["Operation","Market","Financing"];                     
-              }]);
+  
+    
               
               
 
