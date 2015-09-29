@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/NetBeansProjects/MvcTemplate/src/java/MvcTemplate/Controllers/AccountController.java</file>
+            <file>file:/D:/NetBeansProjects/MvcTemplate/web/Content/css/module.css</file>
+            <file>file:/D:/NetBeansProjects/MvcTemplate/web/Content/js/module.js</file>
+            <file>file:/D:/NetBeansProjects/MvcTemplate/web/WEB-INF/Views/Account/Login.html</file>
+            <file>file:/D:/NetBeansProjects/MvcTemplate/web/WEB-INF/Views/Home/Manage.html</file>
         </group>
     </open-files>
 </project-private>

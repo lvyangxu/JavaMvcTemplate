@@ -16,7 +16,7 @@
 
 /*上传控件样式*/
 
-/*导航栏样式*/
+/*顶部导航栏样式*/
 .topNavActive{
     background-color:#b7aa00;
 }
@@ -26,4 +26,12 @@
 .topNavItem:hover{
     background-color:#9acfea;
     cursor:pointer;
+}
+
+/*左侧导航栏样式*/
+.leftNavItem:hover{
+    background-color: #868687;
+    line-height:55px;
+    transition:line-height 0.5s,background-color 0.5s; 
+    transition-timing-function: ease-in;
 }
