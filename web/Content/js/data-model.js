@@ -354,6 +354,20 @@ function setCookie(cookieName, cookieValue, expiredays) {
     document.cookie = cookieName + "=" + escape(cookieValue) + exdateStr+";path=/";
 }
 
+//获取本地日期
+function getLocalDay(addDays) {
+    var d = new Date();
+    d.setDate(d.getDate() + addDays);
+    var vYear = d.getFullYear();
+    var vMon = d.getMonth() + 1;
+    var vDay = d.getDate();
+    var h = d.getHours();
+    var m = d.getMinutes();
+    var se = d.getSeconds();
+    s = vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay);
+    return s;
+}
+
 //获取本地时间
 function getLocalTime(addDays) {
     var d = new Date();

@@ -85,16 +85,19 @@ myModule.directive('mylogin', function () {
  */
 myModule.directive('myupload', function () {
     var directiveDefinitionObject = {
-        template:
+        template:function(tElement, tAttrs){
+            var innerHtml =
                     "<span ng-style=\"uploadFrame\">" +
                         "<button class=\"btn btn-info\" ng-click=\"callSelectButton()\" ng-style=\"uploadDivStyle\">选择上传的文件</button>" +
-                        "<div id=\"fileNum\" ng-style=\"uploadDivStyle\">选择的文件数量:</div>" +
-                        "<div id=\"fileName\" ng-style=\"uploadDivStyle\">文件名:</div>" +
-                        "<div id=\"fileSize\" ng-style=\"uploadDivStyle\">文件大小:</div>" +
+                        "<div id=\""+tAttrs["uploadid"]+"fileNum\" ng-style=\"uploadDivStyle\">选择的文件数量:</div>" +
+                        "<div id=\""+tAttrs["uploadid"]+"fileName\" ng-style=\"uploadDivStyle\">文件名:</div>" +
+                        "<div id=\""+tAttrs["uploadid"]+"fileSize\" ng-style=\"uploadDivStyle\">文件大小:</div>" +
                         "<div ng-style=\"uploadDivStyle\">上传进度:{{fileProgress}}</div>" +
                         "<button class=\"btn btn-warning\" ng-click=\"uploadFile()\" ng-style=\"uploadDivStyle\">开始上传</button>" +
-                        "<input id=\"selectUploadFile\" style=\"display: none\"  type=\"file\"  multiple=\"multiple\" onchange=\"fileSelected()\">" +
-                    "</span>",
+                        "<input id=\""+tAttrs["uploadid"]+"selectUploadFile\" style=\"display: none\"  type=\"file\"  multiple=\"multiple\" onchange=\"fileSelected('"+tAttrs["uploadid"]+"')\">" +
+                    "</span>";
+            return innerHtml;
+        },
         restrict: 'E',
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
             scope.uploadUrl = iAttrs.uploadUrl;
@@ -104,21 +107,21 @@ myModule.directive('myupload', function () {
             }            
             scope.uploadFrame = {"position": "relative","height": "250px","width":scope.uploadWidth+"px","display": "inline-block"};
         },
-        controller: ("UploadController", ["$scope", function ($scope) {
+        controller: ("UploadController", ["$scope","$element", function ($scope,$element) {
                 $scope.callSelectButton = function () {
-                    document.getElementById("selectUploadFile").click();
+                    document.getElementById($element.attr("uploadid")+"selectUploadFile").click();
                 };
                 $scope.uploadDivStyle = {"width": "100%", "margin-top": "10px"};
 
                 $scope.uploadFile = function () {
                     var fd = new FormData();
-                    var fileNum = document.getElementById('selectUploadFile').files.length;
+                    var fileNum = document.getElementById($element.attr("uploadid")+'selectUploadFile').files.length;
                     if (fileNum == 0) {
                         alert("请先选择至少一个文件");
                         return;
                     }
                     for (var i = 0; i < fileNum; i++) {
-                        fd.append(i, document.getElementById('selectUploadFile').files[i]);
+                        fd.append(i, document.getElementById($element.attr("uploadid")+'selectUploadFile').files[i]);
                     }
                     var xhr = new XMLHttpRequest();
                     xhr.upload.addEventListener("progress", $scope.uploadProgress, false);
@@ -163,12 +166,12 @@ myModule.directive('myupload', function () {
 });
 
 //选取文件后的逻辑，angular中未找到对应onchange的事件，只能用js来实现
-function fileSelected() {
-    var fileNum = document.getElementById('selectUploadFile').files.length;
+function fileSelected(id) {
+    var fileNum = document.getElementById(id+'selectUploadFile').files.length;
     var fileName = "";
     var fileSize = 0;
-    for (var i = 0; i < document.getElementById('selectUploadFile').files.length; i++) {
-        var file = document.getElementById('selectUploadFile').files[i];
+    for (var i = 0; i < document.getElementById(id+'selectUploadFile').files.length; i++) {
+        var file = document.getElementById(id+'selectUploadFile').files[i];
         if (fileSize == 1) {
             fileName = file.name;
         } else {
@@ -176,48 +179,61 @@ function fileSelected() {
         }
         fileSize = fileSize + file.size;
     }
-    $("#fileNum").html("选择的文件数量:" + fileNum);
-    $("#fileName").html("文件名:" + fileName);
+    $("#"+id+"fileNum").html("选择的文件数量:" + fileNum);
+    $("#"+id+"fileName").html("文件名:" + fileName);
     if (fileSize > 1024 * 1024) {
-        $("#fileSize").html("文件大小:" + (Math.round(fileSize * 100 / (1024 * 1024)) / 100).toString() + 'MB');
+        $("#"+id+"fileSize").html("文件大小:" + (Math.round(fileSize * 100 / (1024 * 1024)) / 100).toString() + 'MB');
     }
     else {
-        $("#fileSize").html("文件大小:" + (Math.round(fileSize * 100 / 1024) / 100).toString() + 'KB');
+        $("#"+id+"fileSize").html("文件大小:" + (Math.round(fileSize * 100 / 1024) / 100).toString() + 'KB');
     }
 };
 
 /**
  * 自定义指令-顶部固定导航栏
  * mynavbar 自定义指令的标签
- * route-names 导航列表,以","分隔
+ * brand 导航栏左侧的文字
+ * route-names 导航列表名称,以","分隔
+ * route-urls 导航列表指向的链接,以","分隔
  */
 myModule.directive('mytopnavbar', function () {
     var directiveDefinitionObject = {
-        template:
-            "<nav ng-style='topNav'>"+
-                "<div ng-style='topNavBrand'>RadiumGames Business Information System</div>"+
-                "<div ng-style='navRoute'>"+
-                    "<div class='topNavItem' ng-style='navItem' ng-click='doNav(route)' ng-class='{true:\"topNavActive\"}[route.isActive]' ng-repeat='route in routes' ui-sref='{{route.routeName}}'>"+
+        template:function(tElement, tAttrs){
+            var hrefStr =                     "<div class='topNavItem' ng-style='navItem' ng-click='doNav(route)' ng-class='{true:\"topNavActive\"}[route.isActive]' ng-repeat='route in routes' ui-sref='{{route.routeUrl}}'>"+
                         "{{route.routeName}}"+
-                    "</div>"+
+                    "</div>";
+            if(tAttrs["model"]=="href"){
+                hrefStr = "<a class='topNavItem' ng-style='navItem' ng-click='doNav(route)' ng-class='{true:\"topNavActive\"}[route.isActive]' ng-repeat='route in routes' href='#{{route.routeUrl}}'>"+
+                        "{{route.routeName}}"+
+                    "</a>";
+            }
+            
+            return             "<nav ng-style='topNav'>"+
+                "<div ng-style='topNavBrand'>{{brand}}</div>"+
+                "<div ng-style='navRoute'>"+
+                    hrefStr+
                 "</div>"+
                 "<div ng-style='topNavAccount'>"+
-                    "welcome,karl"+
+//                    "welcome,karl"+
                 "</div>"+
-            "</nav>",
+            "</nav>"
+            
+        },
         restrict: 'E',
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+            scope.brand = iAttrs.brand;
+            scope.routeUrls = iAttrs.routeUrls.split(',');
             scope.routeNames = iAttrs.routeNames.split(',');     
             scope.routes = new Array();
-            for (var i = 0; i < scope.routeNames.length; i++) {
+            for (var i = 0; i < scope.routeUrls.length; i++) {
                 if (i == 0) {
-                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": true});
+                    scope.routes.push({"routeName": scope.routeNames[i],"routeUrl":scope.routeUrls[i], "isActive": true});
                 } else {
-                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": false});
+                    scope.routes.push({"routeName": scope.routeNames[i],"routeUrl":scope.routeUrls[i], "isActive": false});
                 }
             }
         },
-        controller: ("TopNavController", ["$scope", function ($scope) {
+        controller: ("TopNavController", ["$scope","$state","$element", function ($scope,$state,$element) {
                 $scope.topNav = {"position":"fixed","width":"100%","height":"50px","background-color":"#31b0d5","color": "white","line-height":"50px"};
                 $scope.topNavBrand = {"font-size":"120%","font-weight":"bold","padding-left":"10px","float":"left"};
                 $scope.navRoute={"height":"50px","text-align":"center"};
@@ -232,20 +248,51 @@ myModule.directive('mytopnavbar', function () {
                             eachRoute.isActive = false;
                         }
                     });
-                }
-                
+                };
+                var defaultUiView = $element.attr("route-urls").split(',')[0];
+                $state.go(defaultUiView);
             }])
     };
     return directiveDefinitionObject;
 });
 
-function initUiRouter(routeArr,routeChildrenArr) {
+//myModule.directive('mynavbar', function () {
+//    var directiveDefinitionObject = {
+//        template:
+//            "<mytopnavbar brand={{brand}} route-names={{topNameStr}} route-urls={{topUrlStr}}></mytopnavbar>"+
+//            "<myleftnavbar route-names={{leftNameStr}} route-urls={{leftUrlStr}}></myleftnavbar>",
+//        restrict: 'E',
+//        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+//            scope.brand = iAttrs.brand;
+//            scope.topNameStr = iAttrs.topNameStr;
+//            scope.topUrlStr = iAttrs.topUrlStr;
+//            scope.leftNameStr = iAttrs.leftNameStr;
+//            scope.leftUrlStr = iAttrs.leftUrlStr;     
+//        },
+//        controller: ("TopNavController", ["$scope", function ($scope) {
+//                
+//            }])
+//    };
+//    return directiveDefinitionObject;
+//});
+
+
+function initUiRouter(routeArr) {
     myModule.config(function ($stateProvider, $urlRouterProvider) {
+//        $urlRouterProvider.when("", routeArr[0]);
         for (var i = 0; i < routeArr.length; i++) {
             $stateProvider.state(routeArr[i], {
-                templateUrl: routeArr[i] + "/" + routeChildrenArr[i][0]
+                templateUrl: routeArr[i] + "/Index"
             });
         }
+//        for (var i = 0; i < routeChildrenArr.length; i++) {
+//            for (var j = 0; j < routeChildrenArr[i].length; j++) {
+//                $stateProvider.state(routeArr[i]+"/"+routeChildrenArr[i][j], {
+//                    templateUrl: routeArr[i] + "/" + routeChildrenArr[i][j]
+//                });
+//            }
+//        }
+        
     });
 }
 
@@ -253,31 +300,33 @@ function initUiRouter(routeArr,routeChildrenArr) {
  * 自定义指令-左侧固定导航栏
  * mynavbar 自定义指令的标签
  * route-names 导航列表,以","分隔
+ * route-urls 导航列表指向的链接,以","分隔
  */
 myModule.directive('myleftnavbar', function () {
     var directiveDefinitionObject = {
         template:
             "<nav ng-style=\"leftNav\">"+ 
-                "<a class=\"leftNavItem\" ng-style=\"leftNavRoute\" href={{leftNavItem.href}} ng-repeat=\"leftNavItem in leftNavItems\">{{leftNavItem.name}}</a>"+                          
+                "<div class=\"leftNavItem\" ng-style=\"leftNavRoute\" ng-class='{true:\"leftNavActive\"}[route.isActive]' ui-sref={{route.routeUrl}} ng-repeat=\"route in leftRoutes\">{{route.routeName}}</div>"+                          
             "</nav>",
         restrict: 'E',
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
-            scope.routeNames = iAttrs.routeNames.split(',');     
-            scope.routes = new Array();
+            scope.leftRouteNames = iAttrs.routeNames.split(',');     
+            scope.leftRouteUrls = iAttrs.routeUrls.split(',');
+            scope.leftRoutes = new Array();
             for (var i = 0; i < scope.routeNames.length; i++) {
                 if (i == 0) {
-                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": true});
+                    scope.leftRoutes.push({"routeName": scope.leftRouteNames[i],"routeUrl":scope.leftRouteUrls[i], "isActive": true});
                 } else {
-                    scope.routes.push({"routeName": scope.routeNames[i], "isActive": false});
+                    scope.leftRoutes.push({"routeName": scope.leftRouteNames[i],"routeUrl":scope.leftRouteUrls[i], "isActive": false});
                 }
             }          
         },
         controller: ("LeftNavController", ["$scope", function ($scope) {
-                $scope.leftNav = {"position":"fixed","font-size":"150%","width":"200px","height":"100%","top":"50px","background-color":"#f5f6f7","text-align":"center"};
-                $scope.leftNavRoute = {"line-height":"50px","margin-top": "0px","margin-bottom": "0px"};
+                $scope.leftNav = {"position":"fixed","font-size":"150%","width":"200px","height":"100%","top":"50px","background-color":"#fff799","text-align":"center"};
+                $scope.leftNavRoute = {"line-height":"50px","margin-top": "0px","margin-bottom": "0px","width":"100%"};
                 
                 $scope.doNav = function (route) {
-                    angular.forEach($scope.routes, function (eachRoute) {
+                    angular.forEach($scope.leftRoutes, function (eachRoute) {
                         if (eachRoute == route) {
                             eachRoute.isActive = true;
                         } else {
@@ -287,6 +336,85 @@ myModule.directive('myleftnavbar', function () {
                 }
                 
             }])
+    };
+    return directiveDefinitionObject;
+});
+
+myModule.directive('mytable', function () {
+    var directiveDefinitionObject = {
+        template: 
+                   "<table ng-style=\"tableStyle\" class=\"table\" >" +
+                        "<thead><tr><th ng-style=\"tableStyle\" ng-repeat=\"columnName in columnNames\">{{columnName}}</th></tr></thead>"+
+                        "<tbody><tr ng-repeat=\"dataRow in dataRows\"><td ng-repeat=\"dataRowElement in dataRow track by $index\">{{dataRowElement}}</td></tr></tbody>"+
+                   "</table>",
+        restrict: 'E',      
+        controller: ("TableController", ["$scope", "$http","$element", function ($scope, $http,$element) {
+                
+                $scope.doBind = function () {
+                    $scope.tableStyle = {"text-align": "center"};
+                    var url = $element.attr("url");
+                    $scope.dataRows = new Array();
+                    $scope.columnNames = $element.attr("columnNames").split(',');
+                    var columnIds = $element.attr("columnIds").split(',');
+                    var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+                    $http({method: "post", url: url, data: null, headers: headers})
+                            .success(function (jsonResult) {
+                                for (var i = 0; i < jsonResult.length; i++) {
+                                    var dataRow = new Array();
+                                    for (var j = 0; j < columnIds.length; j++) {
+                                        dataRow.push(jsonResult[i][columnIds[j]]);
+                                    }
+                                    $scope.dataRows.push(dataRow);
+                                }
+                            })
+                            .error(function (data) {
+                                alert("表格数据加载失败")
+                            });
+                }
+                $scope.doBind();
+       }])
+    };
+    return directiveDefinitionObject;
+});
+
+//页面布局样式1
+myModule.directive('mylayout1', function () {
+    var directiveDefinitionObject = {
+        template: function(tElement, tAttrs){
+            var innerHtml = 
+            "<nav class=\"mylayout1\">"+
+            "<div class=\"brand\">{{brand}}</div>"+
+            "<div class=\"route\">"+
+                "<a href=\"{{route.href}}\" ng-click=\"doActive(route)\" ng-repeat='route in routes'><div ng-class='{true:\"activeRoute\"}[route.isActive]'>{{route.name}}</div></a>"+
+            "</div>"+
+            "</nav>";
+            return innerHtml;            
+        },
+        restrict: 'E',      
+        controller: ("MyLayout1Controller", ["$scope","$element", function ($scope,$element) {
+                $scope.doActive = function (route) {
+                    angular.forEach($scope.routes, function (eachRoute) {
+                        if (eachRoute == route) {
+                            eachRoute.isActive = true;
+                        } else {
+                            eachRoute.isActive = false;
+                        }
+                    });
+                }
+
+                $scope.brand = $element.attr("brand");
+                var routeNameArr = $element.attr("name").split(',');
+                var routeHrefArr = $element.attr("href").split(',');
+                $scope.routes = new Array();
+                for (var i = 0; i < routeNameArr.length; i++) {
+                    var isActive = false;
+                    if (i === 0) {
+                        isActive = true;
+                    }
+                    var route = {"name": routeNameArr[i], "href": "#" + routeHrefArr[i], "isActive": isActive};
+                    $scope.routes.push(route);
+                }
+       }])
     };
     return directiveDefinitionObject;
 });

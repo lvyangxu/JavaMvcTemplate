@@ -5,7 +5,7 @@
  */
 
 //设置相对路径
-var relativePath = "../Content/";
+var relativePath = "Content/";
 
 //引用css
 function cssRefernce(cssPathArr) {
@@ -30,7 +30,7 @@ function jsRefernce(jsPathArr) {
 var myCssPathArr = ["bootstrap.min.css", "bootstrap-theme.min.css","owl.carousel.css","owl.theme.css"];
 var cssString = cssRefernce(myCssPathArr);
 
-var myJsPathArr = ["jquery-2.1.4.min.js", "bootstrap.min.js", "data-model.js", "image-model.js", "communication-model.js","owl.carousel.js","skrollr.min.js"];
+var myJsPathArr = ["jquery-2.1.4.min.js", "bootstrap.min.js", "data-model.js", "image-model.js", "communication-model.js","owl.carousel.js"];
 var jsString = jsRefernce(myJsPathArr);
 
 //输出所有引用的内容
